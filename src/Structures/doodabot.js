@@ -5,10 +5,10 @@ const {
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
-  ActivityType,
 } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
+const Logger = require('./Logger');
 
 class Doodabot extends Client {
   constructor(props) {
@@ -21,7 +21,7 @@ class Doodabot extends Client {
     // const client = this;
 
     this.database = {};
-    this.logger = {};
+    this.logger = new Logger(path.join(__dirname, '..', 'Logs.log'));
 
     this.loadEvents();
     this.loadCommands();
@@ -31,7 +31,9 @@ class Doodabot extends Client {
     this.login(process.env.TOKEN, () => {});
     console.log();
   }
-  log() {}
+  log(text) {
+    this.logger.log(text);
+  }
   loadCommands() {
     const dir = path.join(__dirname, '..', 'commands');
 
