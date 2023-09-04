@@ -1,4 +1,5 @@
 const {
+  ActivityType,
   Client,
   Collection,
   EmbedBuilder,
