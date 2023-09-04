@@ -48,8 +48,10 @@ class Doodabot extends Client {
           if (!cmd.name || !cmd.description || !cmd.run) {
             console.log(`Invalid command in file: `.red + `${file}`);
             return;
-          } else
+          } else {
+            this.commands.set(file.split('.')[0].toLowerCase(), cmd);
             console.log(`Command loaded successfully: `.green + `${cmd.name}`);
+          }
         });
 
         resolve(); // Resolve the promise when all commands are loaded.
