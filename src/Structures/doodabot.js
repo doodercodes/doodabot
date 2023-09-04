@@ -31,9 +31,11 @@ class Doodabot extends Client {
     this.login(process.env.TOKEN, () => {});
     console.log();
   }
+
   log(text) {
     this.logger.log(text);
   }
+
   loadCommands() {
     const dir = path.join(__dirname, '..', 'commands');
 
@@ -57,6 +59,7 @@ class Doodabot extends Client {
       }
     });
   }
+
   loadEvents() {
     const dir = path.join(__dirname, '..', 'events');
 
