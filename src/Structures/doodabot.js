@@ -36,26 +36,15 @@ class Doodabot extends Client {
 
   loadCommands() {
     const dir = path.join(__dirname, '..', 'commands');
-
-    return new Promise((resolve, reject) => {
-      try {
-        const files = fs.readdirSync(dir);
-
-        files.forEach((file) => {
-          const cmd = require(path.join(dir, file));
-          if (!cmd.name || !cmd.description || !cmd.run) {
-            console.log(`Invalid command in file: `.red + `${file}`);
-            return;
-          } else {
-            this.commands.set(file.split('.')[0].toLowerCase(), cmd);
-            console.log(`Command loaded successfully: `.green + `${cmd.name}`);
-          }
-        });
-
-        resolve(); // Resolve the promise when all commands are loaded.
-      } catch (err) {
-        console.error(`${err.message}`.red);
-        reject(err); // Reject the promise if there's an error.
+    const files = fs.readdirSync(dir);
+    files.forEach((file) => {
+      const cmd = require(path.join(dir, file));
+      if (!cmd.name || !cmd.description || !cmd.run) {
+        console.log(`Invalid command in file: `.red + `${file}`);
+        return;
+      } else {
+        this.commands.set(file.split('.')[0].toLowerCase(), cmd);
+        console.log(`Command loaded successfully: `.green + `${cmd.name}`);
       }
     });
   }
@@ -72,7 +61,6 @@ class Doodabot extends Client {
         });
     });
   }
-}
 
   async getGuild(guildID) {
     return new Promise(async (res, rej) => {
