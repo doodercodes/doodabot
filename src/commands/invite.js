@@ -18,18 +18,13 @@ module.exports = {
    * @param {*} param3
    */
   run: async (client, message, args, { GuildDB }) => {
-    let embed = new EmbedBuilder();
-    embed.setColor(botconfig.Theme.main[0]).setTitle('Bot invite');
+    const inviteURL = client.user.inviteURL;
+    let embed = new EmbedBuilder()
+      .setColor(botconfig.Theme.main[0])
+      .setDescription(`Click [here](${inviteURL}) to invite me.`);
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   },
 };
-/*
-`You can invite me by clicking [here](https://discord.com/oauth2/authorize?client_id=${
-          client.botconfig.ClientID
-        }&permissions=${
-          client.botconfig.Permissions
-        }&scope=bot%20${client.botconfig.Scopes.join('%20')}&redirect_url=${
-          client.botconfig.Website
-        }${client.botconfig.CallbackURL}&response_type=code)`
-*/
+
+// &redirect_url=${client.botconfig.Website}${client.botconfig.CallbackURL}&response_type=code)`
