@@ -1,8 +1,10 @@
 module.exports = {
   Admins: [`${process.env.Admin1}`], // Bot admins - ['usedID']
   DefaultPrefix: '!',
-  Permissions: undefined, // Bot Inviting Permissions
+  Permissions: 8, // Bot Inviting Permissions
+  Scopes: ['applications.commands'],
   Website: process.env.Website,
+  SupportServer: undefined,
   Theme: {
     main: { 0: '#deb887', 1: '#e9d0af', 2: '#deb' },
   },
