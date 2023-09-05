@@ -32,11 +32,6 @@ class Doodabot extends Client {
 
   build() {
     this.login(process.env.TOKEN, () => {});
-    console.log();
-  }
-
-  log(text) {
-    this.logger.log(text);
   }
 
   loadCommands() {
