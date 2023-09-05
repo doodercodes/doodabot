@@ -62,14 +62,13 @@ class Doodabot extends Client {
 
   loadEvents() {
     const dir = path.join(__dirname, '..', 'events');
-
     fs.readdir(dir, (err, files) => {
       if (err) console.log(err);
       else
         files.forEach((file) => {
           const event = require(dir + '/' + file);
           this.on(file.split('.')[0], event.bind(null, this));
-          console.log(`Event Loaded successfully: `.green + file.split('.')[0]);
+          console.log(`Event loaded successfully: `.green + file.split('.')[0]);
         });
     });
   }
