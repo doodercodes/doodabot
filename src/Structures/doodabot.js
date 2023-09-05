@@ -15,11 +15,13 @@ class Doodabot extends Client {
   constructor(props) {
     super(props);
 
+    // just in case
+    const client = this;
+
     this.botconfig = require('../../botconfig');
     this.commands = new Collection();
     const botconfig = this.botconfig;
     this.prefix = botconfig.DefaultPrefix;
-    // const client = this;
 
     this.database = {
       guild: new Jsoning('guild.json'),
