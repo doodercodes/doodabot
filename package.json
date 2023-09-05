@@ -19,7 +19,8 @@
     "mongoose": "^7.4.2",
     "monk": "^7.3.4",
     "node-fetch": "^2.6.12",
-    "openai": "^4.4.0"
+    "openai": "^4.4.0",
+    "urban-dictionary": "^3.0.2"
   },
   "devDependencies": {
     "jsdoc": "^4.0.2",
