@@ -9,6 +9,7 @@ const {
 const fs = require('node:fs');
 const path = require('node:path');
 const Logger = require('./Logger');
+const Jsoning = require('jsoning');
 
 class Doodabot extends Client {
   constructor(props) {
@@ -20,7 +21,9 @@ class Doodabot extends Client {
     this.prefix = botconfig.DefaultPrefix;
     // const client = this;
 
-    this.database = {};
+    this.database = {
+      guild: new Jsoning('guild.json'),
+    };
     this.logger = new Logger(path.join(__dirname, '..', 'Logs.log'));
 
     this.loadEvents();
@@ -77,4 +80,11 @@ class Doodabot extends Client {
   }
 }
 
+  async getGuild(guildID) {
+    return new Promise(async (res, rej) => {
+      let guild = await this.database.guild.get(guildID);
+      // .catch((err) => rej(err));
+      res(guild);
+    });
+  }
 module.exports = { Doodabot, GatewayIntentBits };
