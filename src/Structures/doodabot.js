@@ -62,6 +62,10 @@ class Doodabot extends Client {
     });
   }
 
+  log(text) {
+    this.logger.log(text);
+  }
+
   async getGuild(guildID) {
     return new Promise(async (res, rej) => {
       let guild = await this.database.guild.get(guildID);
