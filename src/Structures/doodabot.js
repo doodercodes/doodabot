@@ -73,4 +73,16 @@ class Doodabot extends Client {
       res(guild);
     });
   }
+  sendError(channel, error) {
+    const embed = new EmbedBuilder()
+      .setColor('Red')
+      .setTitle('An error occurred')
+      .setDescription(error)
+      .setTimestamp()
+      .setFooter(
+        'If you think this was a bug, please report it in the report server'
+      );
+    channel.send({ embeds: [embed] });
+  }
+}
 module.exports = { Doodabot, GatewayIntentBits };
