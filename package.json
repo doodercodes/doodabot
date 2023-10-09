@@ -4,8 +4,8 @@
   "description": "Util Bot",
   "main": "index.js",
   "scripts": {
-    "start": "clear & node index.js",
-    "dev": "clear & npx nodemon index.js"
+    "start": "clear & node ./src/index.js",
+    "dev": "clear & npx nodemon ./src/index.js"
   },
   "dependencies": {
     "axios": "^1.4.0",
@@ -18,8 +18,10 @@
     "jsoning": "^0.13.23",
     "mongoose": "^7.4.2",
     "monk": "^7.3.4",
+    "mysql": "^2.18.1",
     "node-fetch": "^2.6.12",
     "openai": "^4.4.0",
+    "time-stamp": "^2.2.0",
     "urban-dictionary": "^3.0.2"
   },
   "devDependencies": {
