@@ -1,39 +1,18 @@
-const {
-  ActivityType,
-  Client,
-  Collection,
-  EmbedBuilder,
-  GatewayIntentBits,
-  Partials,
-} = require('discord.js');
+const { Client, Collection, EmbedBuilder } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const Logger = require('./Logger');
-const Jsoning = require('jsoning');
+const util = require('util');
 
 class Doodabot extends Client {
   constructor(props) {
     super(props);
 
-    // just in case
-    const client = this;
+    const client = this; // just in case
 
-    this.botconfig = require('../../botconfig');
-    this.commands = new Collection();
-    const botconfig = this.botconfig;
-    this.prefix = botconfig.DefaultPrefix;
-
-    this.database = {
-      guild: new Jsoning('guild.json'),
-    };
+    this.botconfig = require('../botconfig');
     this.logger = new Logger(path.join(__dirname, '..', 'Logs.log'));
-
-    this.loadEvents();
-    this.loadCommands();
-  }
-
-  build() {
-    this.login(process.env.TOKEN, () => {});
+    this.commands = new Collection();
   }
 
   loadCommands() {
@@ -53,28 +32,39 @@ class Doodabot extends Client {
 
   loadEvents() {
     const dir = path.join(__dirname, '..', 'events');
+    const interactionFiles = fs
+      .readdirSync(dir)
+      .filter((file) => file.endsWith('.js'));
     fs.readdir(dir, (err, files) => {
-      if (err) console.log(err);
-      else
-        files.forEach((file) => {
-          const event = require(dir + '/' + file);
-          this.on(file.split('.')[0], event.bind(null, this));
-          console.log(`Event loaded successfully: `.green + file.split('.')[0]);
-        });
+      if (err) throw err;
+      else console.log('');
+      files.forEach((file) => {
+        const event = require(dir + '/' + file);
+        this.on(file.split('.')[0], event.bind(null, this));
+        console.log(`Event loaded successfully: `.green + file.split('.')[0]);
+      });
     });
   }
 
-  log(text) {
-    this.logger.log(text);
-  }
-
-  async getGuild(guildID) {
-    return new Promise(async (res, rej) => {
-      let guild = await this.database.guild.get(guildID);
-      // .catch((err) => rej(err));
-      res(guild);
+  /*   loadInteractions() {
+    const dir = path.join(__dirname, '..', 'interactions');
+    fs.readdir(dir, (err, files) => {
+      if (err) throw err;
+      console.log('');
+      files.forEach((file) => {
+        const interaction = require(dir + '/' + file);
+        if (typeof interaction === 'function') {
+          this.on(file.split('.')[0], async (interactionHandler) => {
+            interactionHandler.call(this, this);
+          });
+          console.log(
+            `Interaction loaded successfully: `.green + file.split('.')[0]
+          );
+        } else console.log(`Invalid interaction in file: ${file}`);
+      });
     });
-  }
+  } */
+
   sendError(channel, error) {
     const embed = new EmbedBuilder()
       .setColor('Red')
@@ -86,5 +76,25 @@ class Doodabot extends Client {
       );
     channel.send({ embeds: [embed] });
   }
+
+  log(text) {
+    this.logger.log(text);
+  }
+
+  build() {
+    this.login(this.botconfig.APP.TOKEN, () => {});
+    this.loadEvents();
+    this.loadCommands();
+    // this.loadInteractions();
+    /*     console.log(this.commands);
+    this.commands.forEach((cmd) => {}); */
+
+    this.on('interactionCreate', async (interaction) => {
+      // if (!interaction.isChatInputCommand()) return;
+      if (!interaction.isCommand()) return;
+      // const { commandName, options, user, guildId } = interaction;
+    });
+  }
 }
-module.exports = { Doodabot, GatewayIntentBits };
+
+module.exports = { Doodabot };
