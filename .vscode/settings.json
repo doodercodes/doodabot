@@ -1,0 +1,26 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "doodabot",
+      "database": "doodabot",
+      "username": "root",
+      "password": ""
+    }
+  ],
+  "cSpell.words": [
+    "doodabot",
+    "dooder",
+    "doodercodes",
+    "gitdoc",
+    "github",
+    "Inno"
+  ]
+}
