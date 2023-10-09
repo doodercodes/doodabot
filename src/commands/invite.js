@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require('discord.js');
-const botconfig = require('../../botconfig');
 
 module.exports = {
   name: 'invite',
@@ -17,10 +16,10 @@ module.exports = {
    * @param {string[]} args
    * @param {*} param3
    */
-  run: async (client, message, args, { GuildDB }) => {
+  run: async (client, message, args) => {
     const inviteURL = client.user.inviteURL;
     let embed = new EmbedBuilder()
-      .setColor(botconfig.Theme.main[0])
+      .setColor(client.botconfig.Theme.main[0])
       .setDescription(`Click [here](${inviteURL}) to invite me.`);
 
     message.channel.send({ embeds: [embed] });
