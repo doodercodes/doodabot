@@ -1,12 +1,13 @@
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+# !.vscode/*.code-snippets
 
 doodabot.session.sql
 doodabot.session.md
+Bot-Hosting.session.sql
 tempCodeRunnerFile.javascript
 tempCodeRunnerFile.js
 
