@@ -10,7 +10,7 @@ class Doodabot extends Client {
 
     const client = this; // just in case
 
-    this.botconfig = require('../botconfig');
+    this.botconfig = require('../../botconfig');
     this.logger = new Logger(path.join(__dirname, '..', 'Logs.log'));
     this.commands = new Collection();
   }
@@ -18,31 +18,32 @@ class Doodabot extends Client {
   loadCommands() {
     const dir = path.join(__dirname, '..', 'commands');
     const files = fs.readdirSync(dir);
-    files.forEach((file) => {
-      const cmd = require(path.join(dir, file));
-      if (!cmd.name || !cmd.description || !cmd.run) {
-        console.log(`Invalid command in file: `.red + `${file}`);
-        return;
-      } else {
-        this.commands.set(file.split('.')[0].toLowerCase(), cmd);
-        console.log(`Command loaded successfully: `.green + `${cmd.name}`);
-      }
-    });
+    files
+      .filter((file) => file.endsWith('.js'))
+      .forEach((file) => {
+        const cmd = require(path.join(dir, file));
+        if (!cmd.name || !cmd.description || !cmd.run) {
+          console.log(`Invalid command in file: `.red + `${file}`);
+          return;
+        } else {
+          this.commands.set(file.split('.')[0].toLowerCase(), cmd);
+          console.log(`Command loaded successfully: `.green + `${cmd.name}`);
+        }
+      });
   }
 
   loadEvents() {
     const dir = path.join(__dirname, '..', 'events');
-    const interactionFiles = fs
-      .readdirSync(dir)
-      .filter((file) => file.endsWith('.js'));
     fs.readdir(dir, (err, files) => {
       if (err) throw err;
       else console.log('');
-      files.forEach((file) => {
-        const event = require(dir + '/' + file);
-        this.on(file.split('.')[0], event.bind(null, this));
-        console.log(`Event loaded successfully: `.green + file.split('.')[0]);
-      });
+      files
+        .filter((val) => val.endsWith('.js'))
+        .forEach((file) => {
+          const event = require(dir + '/' + file);
+          this.on(file.split('.')[0], event.bind(null, this));
+          console.log(`Event loaded successfully: `.green + file.split('.')[0]);
+        });
     });
   }
 

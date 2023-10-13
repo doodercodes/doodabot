@@ -5,10 +5,12 @@ module.exports = async (client) => {
     client.botconfig.Permissions
   }&scope=bot%20${client.botconfig.Scopes.join('%20')}`;
 
-  client.user.setPresence({
-    activities: [{ name: `${client.botconfig.Presence.name}` }],
-    status: `${client.botconfig.Presence.status}`,
-  });
+  updatePresence(client);
+
+  // Call the updatePresence function every 2 minutes
+  setInterval(() => {
+    updatePresence(client);
+  }, 2 * 60 * 1000);
 
   client.application.commands.create({
     name: 'help',
@@ -20,3 +22,10 @@ module.exports = async (client) => {
       `${client.user.tag}\r\n`.cyan.underline
   );
 };
+
+function updatePresence(client) {
+  client.user.setPresence({
+    activities: [{ name: `${client.botconfig.Presence.name}` }],
+    status: `${client.botconfig.Presence.status}`,
+  });
+}
