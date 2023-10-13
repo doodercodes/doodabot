@@ -4,8 +4,8 @@
   "description": "Util Bot",
   "main": "index.js",
   "scripts": {
-    "start": "clear & node ./src/index.js",
-    "dev": "clear & npx nodemon ./src/index.js"
+    "start": "clear & node ./bot/src/index.js",
+    "dev": "clear & npx nodemon ./bot/src/index.js"
   },
   "dependencies": {
     "axios": "^1.4.0",
