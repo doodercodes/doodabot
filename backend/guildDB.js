@@ -3,10 +3,9 @@ const mysql = require('mysql');
 const util = require('util');
 
 class GuildDB {
-  db = 's35616_doodabot';
+  db = 'doodabot';
   pool = mysql.createPool({
     //  connectionLimit: 10,
-    host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT || 3306,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
@@ -43,7 +42,7 @@ class GuildDB {
           FOREIGN KEY (guild_id) REFERENCES Guilds(guild_id)
       ) ENGINE = InnoDB;`);
   }
-  
+
   async connection(cb) {
     return this.pool.getConnection(async (err, _) => {
       if (err) {
