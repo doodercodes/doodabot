@@ -9,8 +9,6 @@ async function processGuildAndMembers(guild, members) {
 async function guildQueries(guild, members) {
   await db.query(`use ${db.db}`);
 
-  console.log(members);
-
   await db
     .query(
       `INSERT INTO Guilds (guild_id, name)
