@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const util = require('util');
 
 class GuildDB {
-  db = 's35616_doodabot';
+  db = 's35776_doodabot';
   pool = mysql.createPool({
     //  connectionLimit: 10,
     host: process.env.MYSQL_HOST,
