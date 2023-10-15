@@ -9,7 +9,7 @@ class GuildDB {
     port: process.env.MYSQL_PORT || 3306,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
-    database: this.db,
+    database: '',
   });
   query = util.promisify(this.pool.query).bind(this.pool); // Promisify the pool query function
 
