@@ -17,7 +17,7 @@ module.exports = {
     SECRET: process.env.CLIENT_SECRET,
   },
   Scopes: ['applications.commands', 'bot'],
-  Permissions: 8, // Bot Inviting Permissions
+  Permissions: 28445567545079, // Bot Inviting Permissions
   Partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   Intents: [
     GatewayIntentBits.Guilds,
