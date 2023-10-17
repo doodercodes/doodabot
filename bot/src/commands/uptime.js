@@ -1,4 +1,4 @@
-const obj = {
+module.exports = {
   name: 'uptime',
   description: '',
   usage: '',
@@ -16,4 +16,3 @@ const obj = {
     message.channel.send(uptime);
   },
 };
-module.exports = obj;

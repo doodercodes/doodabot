@@ -9,13 +9,6 @@ module.exports = {
     member: [],
   },
   aliases: ['inv'],
-  /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} client
-   * @param {import("discord.js").Message} message
-   * @param {string[]} args
-   * @param {*} param3
-   */
   run: async (client, message, args) => {
     const inviteURL = client.user.inviteURL;
     let embed = new EmbedBuilder()
@@ -25,5 +18,3 @@ module.exports = {
     message.channel.send({ embeds: [embed] });
   },
 };
-
-// &redirect_url=${client.botconfig.Website}${client.botconfig.CallbackURL}&response_type=code)`
