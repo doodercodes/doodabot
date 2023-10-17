@@ -1,6 +1,4 @@
-require('dotenv').config({
-  path: '.env.development.local',
-});
+require('dotenv').config();
 require('colors');
 require('../../backend/index');
 const { Intents, Partials } = require('../botconfig');
