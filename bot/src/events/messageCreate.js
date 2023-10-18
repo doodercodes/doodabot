@@ -1,6 +1,34 @@
 const GuildDB = require('../../../backend/guildDB');
 const db = new GuildDB();
 
+function getCommandPrefix(client, message) {
+  const botconfig = client.botconfig;
+  const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
+  const content = message.content;
+
+  return content.startsWith(botconfig.DefaultPrefix)
+    ? botconfig.DefaultPrefix
+    : content.match(prefixMention)
+    ? content.match(prefixMention)[0]
+    : null;
+}
+
+function findCommand(client, message, prefix) {
+  // Split the message into an array of arguments and the command
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+  const cmd = findRegisteredOrAliasCommand(client, command);
+  return { cmd, args };
+}
+
+function findRegisteredOrAliasCommand(client, command) {
+  // Find the command in the bot's registered commands or aliases
+  return (
+    client.commands.get(command) ||
+    client.commands.find((x) => x.aliases && x.aliases.includes(command))
+  );
+}
+
 async function checkPerms(client, cmd, message) {
   // Check if the user or guild is banned from using the bot
   if (await isUserBanned(message.guild.id, message.author.id))
@@ -37,34 +65,6 @@ async function isUserBanned(guildId, userId) {
   } catch (err) {
     console.error(`Error checking user ban status: ${err}`);
   }
-}
-
-function getCommandPrefix(client, message) {
-  const botconfig = client.botconfig;
-  const prefixMention = new RegExp(`^<@!?${client.user.id}> `);
-  const content = message.content;
-
-  return content.startsWith(botconfig.DefaultPrefix)
-    ? botconfig.DefaultPrefix
-    : content.match(prefixMention)
-    ? content.match(prefixMention)[0]
-    : null;
-}
-
-function findCommand(client, message, prefix) {
-  // Split the message into an array of arguments and the command
-  const args = message.content.slice(prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-  const cmd = findRegisteredOrAliasCommand(client, command);
-  return { cmd, args };
-}
-
-function findRegisteredOrAliasCommand(client, command) {
-  // Find the command in the bot's registered commands or aliases
-  return (
-    client.commands.get(command) ||
-    client.commands.find((x) => x.aliases && x.aliases.includes(command))
-  );
 }
 
 async function isUserInMemberDatabase(guildId, userId, username) {
