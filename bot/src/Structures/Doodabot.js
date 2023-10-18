@@ -21,14 +21,11 @@ class Doodabot extends Client {
     files
       .filter((file) => file.endsWith('.js'))
       .forEach((file) => {
-        const cmd = require(path.join(dir, file));
-        if (!cmd.name || !cmd.description || !cmd.run) {
-          console.log(`Invalid command in file: `.red + `${file}`);
-          return;
-        } else {
-          this.commands.set(file.split('.')[0].toLowerCase(), cmd);
-          console.log(`Command loaded successfully: `.green + `${cmd.name}`);
-        }
+        const CommandClass = require(path.join(dir, file));
+        const cmd = new CommandClass();
+        const { name, desc, run } = cmd;
+        if (!name || !run) return;
+        else this.commands.set(file.split('.')[0].toLowerCase(), cmd);
       });
   }
 
