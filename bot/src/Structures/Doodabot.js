@@ -43,7 +43,6 @@ class Doodabot extends Client {
         .forEach((file) => {
           const event = require(dir + '/' + file);
           this.on(file.split('.')[0], event.bind(null, this));
-          console.log(`Event loaded successfully: `.green + file.split('.')[0]);
         });
     });
   }
