@@ -16,7 +16,7 @@ class Doodabot extends Client {
   }
 
   loadCommands() {
-    const dir = path.join(__dirname, '..', 'commands');
+    const dir = path.join(__dirname, '..', 'Commands');
     const files = fs.readdirSync(dir);
     files
       .filter((file) => file.endsWith('.js'))
