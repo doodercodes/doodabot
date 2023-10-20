@@ -18,7 +18,7 @@ module.exports = async (client) => {
   });
 
   console.log(
-    '\r\nSuccessfully logged in as: '.green +
+    'Successfully logged in as: '.green +
       `${client.user.tag}\r\n`.cyan.underline
   );
 };

@@ -21,11 +21,15 @@ class Doodabot extends Client {
     files
       .filter((file) => file.endsWith('.js'))
       .forEach((file) => {
-        const CommandClass = require(path.join(dir, file));
-        const cmd = new CommandClass();
-        const { name, desc, run } = cmd;
-        if (!name || !run) return;
-        else this.commands.set(file.split('.')[0].toLowerCase(), cmd);
+        try {
+          const CommandClass = require(path.join(dir, file));
+          const cmd = new CommandClass();
+          const { name, desc, run } = cmd;
+          if (!name || !run) return;
+          else this.commands.set(file.split('.')[0].toLowerCase(), cmd);
+        } catch (err) {
+          console.error(`Failed to load command ${file}:`, err);
+        }
       });
   }
 
@@ -39,7 +43,6 @@ class Doodabot extends Client {
         .forEach((file) => {
           const event = require(dir + '/' + file);
           this.on(file.split('.')[0], event.bind(null, this));
-          console.log(`Event loaded successfully: `.green + file.split('.')[0]);
         });
     });
   }
