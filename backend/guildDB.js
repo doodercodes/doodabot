@@ -43,18 +43,6 @@ class GuildDB {
           FOREIGN KEY (guild_id) REFERENCES Guilds(guild_id)
       ) ENGINE = InnoDB;`);
   }
-
-  async connection(cb) {
-    return this.pool.getConnection(async (err, _) => {
-      if (err) {
-        console.log(`Error getting connection from pool: ${err}`);
-        // reject(err);
-        return;
-      }
-
-      await cb(_);
-    });
-  }
 }
 
 module.exports = GuildDB;

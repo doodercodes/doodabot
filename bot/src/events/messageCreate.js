@@ -31,7 +31,7 @@ function findRegisteredOrAliasCommand(client, command) {
 
 async function checkPerms(client, cmd, message) {
   // Check if the user or guild is banned from using the bot
-  if (await isUserBanned(message.guild.id, message.author.id))
+  if (await isUserBanned(message))
     return client.sendError(message.channel, 'Banned');
 
   // Check if the user has the required permissions to run the command
@@ -47,17 +47,18 @@ async function checkPerms(client, cmd, message) {
     return client.sendError(message.channel, 'Missing permissions');
 }
 
-async function isUserBanned(guildId, userId) {
+async function isUserBanned(message) {
   try {
-    await db.query(`use ${db.db}`);
     // Check if the user is banned in the Guilds table
     const guildResult = await db.query(
-      `SELECT is_banned FROM Guilds WHERE guild_id = '${guildId}'`
+      'SELECT is_banned FROM Guilds WHERE guild_id = ?',
+      [message.guild.id]
     );
 
     // Check if the user is banned in the Members table
     const memberResult = await db.query(
-      `SELECT is_banned FROM Members WHERE guild_id = '${guildId}' AND user_id = '${userId}'`
+      'SELECT is_banned FROM Members WHERE guild_id = ? AND user_id = ?',
+      [message.guild.id, message.author.id]
     );
 
     // User or Guild is banned in the Guilds table
@@ -67,11 +68,38 @@ async function isUserBanned(guildId, userId) {
   }
 }
 
-async function isUserInMemberDatabase(guildId, userId, username) {
+async function isGuildInGuildDatabase(message) {
   try {
-    await db.query(`use ${db.db}`);
+    let guildResult = await db.query(
+      'SELECT * FROM Guilds WHERE guild_id = ?',
+      [message.guild.id]
+    );
+
+    if (guildResult && guildResult.length === 0) return false;
+    return true;
+  } catch (err) {
+    console.error(`Error checking guild database: ${err}`);
+  }
+}
+
+async function insertGuildIntoGuildDatabase(message) {
+  if (!(await isGuildInGuildDatabase(message))) {
+    try {
+      await db.query('INSERT INTO Guilds (guild_id, name) VALUES (?, ?)', [
+        message.guild.id,
+        message.guild.name,
+      ]);
+    } catch (err) {
+      console.error(`Failed to add new guild to Guilds Database: ${err}`);
+    }
+  }
+}
+
+async function isUserInMemberDatabase(message) {
+  try {
     let memberResult = await db.query(
-      `SELECT user_id FROM Members WHERE guild_id = '${guildId}' AND user_id = '${userId}'`
+      'SELECT user_id FROM Members WHERE guild_id = ? AND user_id = ?',
+      [message.guild.id, message.author.id]
     );
 
     if (memberResult && memberResult.length === 0) return false;
@@ -81,18 +109,15 @@ async function isUserInMemberDatabase(guildId, userId, username) {
   }
 }
 
-async function insertUserIntoMemberDatabase(guildId, userId, username) {
-  if (!(await isUserInMemberDatabase(guildId, userId, username))) {
+async function insertUserIntoMemberDatabase(message) {
+  if (!(await isUserInMemberDatabase(message))) {
     try {
-      await db.query(`use ${db.db}`);
       await db.query(
-        `
-      INSERT INTO Members (guild_id, user_id, username)
-      VALUES ('${guildId}', '${userId}', '${username}');
-      `
+        'INSERT INTO Members (guild_id, user_id, username) VALUES (?, ?, ?)',
+        [message.guild.id, message.author.id, message.author.username]
       );
     } catch (err) {
-      console.error(`Failed to add new user to Member Database: ${err}`);
+      console.error(`Failed to add new user to Members Database: ${err}`);
     }
   }
 }
@@ -102,11 +127,9 @@ module.exports = async (client, message) => {
 
   const prefix = getCommandPrefix(client, message);
 
-  await insertUserIntoMemberDatabase(
-    message.guild.id,
-    message.author.id,
-    message.author.username
-  );
+  await insertGuildIntoGuildDatabase(message);
+  await insertUserIntoMemberDatabase(message);
+  await isGuildInGuildDatabase(message);
 
   // If the message doesn't start with the prefix, ignore it
   if (!prefix) return;
