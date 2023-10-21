@@ -6,10 +6,11 @@ class GuildDB {
   db = 'doodabot';
   pool = mysql.createPool({
     //  connectionLimit: 10,
+    host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT || 3306,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
-    database: '',
+    database: this.db,
   });
   query = util.promisify(this.pool.query).bind(this.pool); // Promisify the pool query function
 
@@ -41,18 +42,6 @@ class GuildDB {
           PRIMARY KEY(ID),
           FOREIGN KEY (guild_id) REFERENCES Guilds(guild_id)
       ) ENGINE = InnoDB;`);
-  }
-
-  async connection(cb) {
-    return this.pool.getConnection(async (err, _) => {
-      if (err) {
-        console.log(`Error getting connection from pool: ${err}`);
-        // reject(err);
-        return;
-      }
-
-      await cb(_);
-    });
   }
 }
 
