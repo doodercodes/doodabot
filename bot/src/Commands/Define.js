@@ -1,44 +1,82 @@
 const { EmbedBuilder } = require('discord.js');
-const ud = require('urban-dictionary');
 const Command = require('../Structures/Command');
+const ud = require('urban-dictionary');
 
 class Define extends Command {
   constructor() {
-    super(
-      'define',
-      '',
-      '',
-      {
+    super({
+      name: 'define',
+      desc: '',
+      usage: '',
+      perms: {
         channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
         member: [],
       },
-      ['dict', 'definition', 'define', 'def', 'ud']
-    );
+      aliases: ['dict', 'definition', 'define', 'def', 'ud'],
+    });
   }
-  async run(client, message, args) {
-    const def = await define(args);
-    const embed = new EmbedBuilder()
-      .setColor('Green')
-      .setTitle(def.word)
-      .setDescription(def.definition)
-      .setTimestamp();
 
-    message.channel.send({ embeds: [embed] });
+  async run(client, message, args) {
+    const word = await define(message, args);
+
+    if (!word) return;
+
+    message.channel.send({
+      embeds: [createEmbed(message, word)],
+    });
   }
 }
 
-async function define(args) {
-  if (args.length <= 0) return;
-  let lookup = args.join(' ');
+function search(message, args) {
+  if (args.length === 0) {
+    message.reply('Please provide something to search');
+    return;
+  }
+
+  //TODO set a character limit
+  return args.join(' ');
+}
+
+async function define(message, args) {
   try {
-    lookup = await ud.define(lookup);
-    const result = lookup.reduce((prev, current) => {
+    const input = search(message, args);
+
+    if (!input) return;
+
+    const [...lookup] = await ud.define(input);
+    return lookup.reduce((prev, current) => {
       return current.thumbs_up > prev.thumbs_up ? current : prev;
     });
-    return result;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
+}
+
+function createEmbed(message, word) {
+  return new EmbedBuilder()
+    .setTitle(word.word)
+    .setURL(word.permalink)
+    .addFields(
+      {
+        name: 'Definition',
+        value: word.definition,
+        inline: false,
+      },
+      {
+        name: 'Example',
+        value: word.example,
+        inline: false,
+      },
+      {
+        name: 'Rating',
+        value: `${word.thumbs_up} 👍 || ${word.thumbs_down} 👎`,
+        inline: false,
+      }
+    )
+    .setFooter({
+      text: `Command issued by ${message.author.tag}`,
+      iconURL: message.author.displayAvatarURL(),
+    });
 }
 
 module.exports = Define;

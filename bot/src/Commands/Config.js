@@ -3,18 +3,18 @@ const Command = require('../Structures/Command');
 
 class Config extends Command {
   constructor() {
-    super(
-      '',
-      '',
-      '',
-      {
-        channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    super({
+      name: 'config',
+      desc: '',
+      usage: '',
+      perms: {
+        channel: [],
         member: [],
       },
-      ['']
-    );
+      aliases: ['setup'],
+    });
   }
-  async run(client, message, _) {}
+  async run(client, message, args) {}
 }
 
 module.exports = Config;

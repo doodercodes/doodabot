@@ -1,21 +1,20 @@
-const { EmbedBuilder } = require('discord.js');
 const Command = require('../Structures/Command');
 
 class Uptime extends Command {
   constructor() {
-    super(
-      'uptime',
-      '',
-      '',
-      {
-        channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    super({
+      name: 'uptime',
+      desc: 'Shows how long the bot has been running',
+      usage: '',
+      perms: {
+        channel: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
         member: [],
       },
-      ['inv']
-    );
+      aliases: [''],
+    });
   }
-  async run(client, message, _) {
-    uptime(client, message);
+  async run(client, message, args) {
+    message.channel.send(uptime(client, message));
   }
 }
 
@@ -24,8 +23,7 @@ function uptime(client, message) {
   const hrs = Math.floor(client.uptime / 3600000) % 24;
   const minutes = Math.floor(client.uptime / 60000) % 60;
   const seconds = Math.floor(client.uptime / 1000) % 60;
-  const uptime = `__Uptime:__\n${days}d ${hrs}h ${minutes}m ${seconds}s`;
-  message.channel.send(uptime);
+  return `__Uptime:__\n${days}d ${hrs}h ${minutes}m ${seconds}s`;
 }
 
 module.exports = Uptime;

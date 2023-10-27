@@ -1,5 +1,5 @@
-class Command {
-  constructor(name, desc, usage, perms, aliases) {
+module.exports = class Command {
+  constructor({ name, desc, usage, perms, aliases }) {
     this.name = name;
     this.desc = desc;
     this.usage = usage;
@@ -9,6 +9,4 @@ class Command {
   async run(client, message, args) {
     // Implement the command logic in the derived classes
   }
-}
-
-module.exports = Command;
+};
