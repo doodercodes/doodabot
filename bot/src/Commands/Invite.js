@@ -3,29 +3,28 @@ const Command = require('../Structures/Command');
 
 class Invite extends Command {
   constructor() {
-    super(
-      'invite',
-      'To invite me to your server',
-      '',
-      {
-        channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    super({
+      name: 'invite',
+      desc: "Get the bot's invitation link.",
+      usage: '',
+      perms: {
+        channel: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
         member: [],
       },
-      ['inv']
-    );
+      aliases: ['inv'],
+    });
   }
   async run(client, message, args) {
-    invite(client, message);
+    message.channel.send({
+      embeds: [createEmbed(client)],
+    });
   }
 }
 
-function invite(client, message) {
-  const inviteURL = client.user.inviteURL;
-  let embed = new EmbedBuilder()
+function createEmbed(client) {
+  return new EmbedBuilder()
     .setColor(client.botconfig.Theme.main[0])
-    .setDescription(`Click [here](${inviteURL}) to invite me.`);
-
-  message.channel.send({ embeds: [embed] });
+    .setDescription(`Click [here](${client.user.inviteURL}) to invite me.`);
 }
 
 module.exports = Invite;

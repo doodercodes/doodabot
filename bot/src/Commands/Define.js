@@ -4,16 +4,16 @@ const ud = require('urban-dictionary');
 
 class Define extends Command {
   constructor() {
-    super(
-      'define',
-      '',
-      '',
-      {
+    super({
+      name: 'define',
+      desc: '',
+      usage: '',
+      perms: {
         channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
         member: [],
       },
-      ['dict', 'definition', 'define', 'def', 'ud']
-    );
+      aliases: ['dict', 'definition', 'define', 'def', 'ud'],
+    });
   }
 
   async run(client, message, args) {
@@ -21,9 +21,8 @@ class Define extends Command {
 
     if (!word) return;
 
-    const embed = createEmbed(message, word);
     message.channel.send({
-      embeds: [embed],
+      embeds: [createEmbed(message, word)],
     });
   }
 }
@@ -43,7 +42,7 @@ async function define(message, args) {
     const input = search(message, args);
 
     if (!input) return;
-    
+
     const [...lookup] = await ud.define(input);
     return lookup.reduce((prev, current) => {
       return current.thumbs_up > prev.thumbs_up ? current : prev;
