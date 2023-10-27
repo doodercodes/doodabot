@@ -31,9 +31,11 @@ async function memberQueries(guild, member) {
   }
 }
 
-module.exports = async (_, guild) => {
+module.exports = async (client, guild) => {
+  const members = await guild.members.fetch();
+
   await processGuildAndMembers(
     guild,
-    guild.members.fetch().filter((member) => !member.user.bot)
+    members.filter((member) => !member.user.bot)
   );
 };
