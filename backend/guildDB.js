@@ -1,3 +1,7 @@
+/* 
+BACKEND IS A WIP AND WILL BE RECONSTRUCTED AS WELL
+*/
+
 const { DefaultPrefix } = require('../bot/botconfig');
 const mysql = require('mysql');
 const util = require('util');
