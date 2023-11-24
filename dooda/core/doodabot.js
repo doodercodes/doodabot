@@ -1,7 +1,7 @@
-const { Client, Collection, EmbedBuilder } = require('discord.js');
+const { Client, Collection, EmbedBuilder, Events } = require('discord.js');
+const ModuleManager = require('./mechanics/modman');
 const Config = require('./mechanics/config');
 const Logger = require('./mechanics/logger');
-const ModuleManager = require('./mechanics/modman');
 
 const config = new Config();
 
@@ -25,16 +25,14 @@ class Doodabot extends Client {
     // this.log.log('---------------------------');
     this.log.info(`Successfully logged in as ${this.user.username}.`);
   }
-
   /**
    * Check if the bot is ready.
    * @return {bool} ready or not
    */
   isReady() {}
 
-  initModules() {
-    const modules = new ModuleManager(this);
-    return modules;
+  async initModules() {
+    return new ModuleManager(this);
   }
 
   async build() {
@@ -46,8 +44,7 @@ class Doodabot extends Client {
     }
 
     this.once('ready', () => {
-      // this.onReady();
-      // console.log(this.commands);
+      this.ready();
     });
 
     /*     this.loadEvents();

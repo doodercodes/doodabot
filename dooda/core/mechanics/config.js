@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: '.env.development.local',
+});
+
 const { GatewayIntentBits, Partials } = require('discord.js');
 
 class DiscordConfig {

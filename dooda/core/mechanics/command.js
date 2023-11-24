@@ -1,25 +1,22 @@
-const Logger = require('./logger');
-
 class DoodabotCommand {
   constructor(bot) {
     this.bot = bot;
-    // this.db = this.bot.config;
-    this.nsfw = false;
-    this.owner = false;
-    this.logger = new Logger();
-    this.name;
-    this.category;
-    this.enabled = true;
+    this.log = this.bot.log;
+    this.name = '';
+    this.category = '';
+    this.aliases = [];
+    this.usage = '';
+    this.desc = '';
     this.perms = {
       channel: [],
       member: [],
     };
-    this.aliases = [];
-    this.usage;
-    this.desc;
-    this.type = 'command';
+    this.owner = false;
+    this.nsfw = false;
+    this.enabled = true;
   }
   async run() {}
+  
 }
 
 module.exports = DoodabotCommand;

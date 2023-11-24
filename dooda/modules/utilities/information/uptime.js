@@ -1,14 +1,11 @@
-const DoodabotCommand = require('../../../core/mechanics/command');
-
-class UptimeCommand extends DoodabotCommand {
-  constructor(bot) {
-    super();
-    this.bot = bot;
-    this.name = 'Uptime';
-    this.category = 'utility';
-    this.aliases = ['up'];
-    this.usage = '!uptime';
-    this.desc = "Check the bot's uptime.";
+class UptimeCommand {
+  constructor(cmd) {
+    this.cmd = cmd;
+    cmd.name = 'Uptime';
+    cmd.category = 'utility';
+    cmd.aliases = ['up'];
+    cmd.usage = '!uptime';
+    cmd.desc = "Check the bot's uptime.";
   }
 
   async run(msg) {

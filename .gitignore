@@ -14,6 +14,8 @@ welcome-card.web
 Directory Listing.txt
 Test.js
 dooda/core/mechanics/executor.js
+dooda/core/mechanics/event.js
+dooda/modules/events
 # Local History for Visual Studio Code
 .history/
 
