@@ -7,52 +7,48 @@ const path = require('path');
 class ModuleManager {
   constructor(bot) {
     this.bot = bot;
-    this.log = new Logger();
     this.commands = {};
 
     this.loadAllModules();
   }
 
   async loadAllModules() {
-    const dir = path.join(__dirname, '../../modules/');
-    try {
-      for (const [root, _dirs, files] of walkSync(dir)) {
-        if (root === path.join(__dirname, '../../modules/events'))
-          await this.loadEvents(root, _dirs, files);
-        else await this.loadCommands(root, _dirs, files);
-      }
-    } catch (err) {
-      this.log.error(`Error reading modules directory: ${err.message}`);
+    const modulesDir = '../../modules/';
+    const eventsDir = modulesDir + 'events';
+    for (const [root, file] of walkSync(path.join(__dirname, modulesDir))) {
+      const fullPath = path.join(root, file);
+      if (path.extname(fullPath) !== '.js') continue;
+      if (root === path.join(__dirname, eventsDir))
+        await this.loadEvents(file, fullPath);
+      else await this.loadCommands(file, fullPath);
     }
   }
 
-  async loadEvents(root, _dirs, files) {}
+  async loadEvents(file, fullPath) {}
 
-  async loadCommands(root, _dirs, files) {
-    for (const file of files) {
-      const filePath = path.join(root, file);
-      if (path.extname(filePath) !== '.js') continue;
-      try {
-        const Command = require(filePath);
-        const CreateCommand = new DoodabotCommand(this.bot);
-        const cmd = new Command(CreateCommand);
-        await this.setCommand(cmd, file);
-      } catch (err) {
-        this.log.error(`Failed to load command ${cmd.name}: ${err.message}`);
-      }
+  async loadCommands(file, fullPath) {
+    try {
+      const Command = require(fullPath);
+      const CreateCommand = new DoodabotCommand(this.bot);
+      const cmd = new Command(CreateCommand);
+      await this.setCommand(cmd, file);
+    } catch (err) {
+      this.bot.log.error(`Failed to load command in \`${file}\`: ${err}`);
     }
   }
 
   async setCommand(command, file) {
     try {
       const { cmd } = command;
-      if (cmd.name && cmd.run) {
-        this.bot.commands.set(cmd.name.toLowerCase(), command);
-        this.commands[nameToLower] = cmd;
-        this.log.info(`Loaded the ${cmd.name} command.`);
+      const cmdName = cmd.name;
+      const cmdNameLower = cmdName.toLowerCase();
+      if (cmdName && cmd.run) {
+        this.bot.commands.set(cmdNameLower, command);
+        this.commands[cmdNameLower] = cmd;
+        this.bot.log.info(`Loaded the ${cmdName} command.`);
       }
     } catch (err) {
-      this.log.error(`Cannot set command in: ${file}: ${err.message}`);
+      this.bot.log.error(`Cannot set command in \`${file}\`: ${err}`);
     }
   }
 }
@@ -62,8 +58,11 @@ function* walkSync(dir) {
   for (const file of files) {
     const pathToFile = path.join(dir, file);
     const isDirectory = fs.statSync(pathToFile).isDirectory();
-    if (isDirectory) yield* walkSync(pathToFile);
-    else yield [dir, files, files];
+    if (isDirectory) {
+      yield* walkSync(pathToFile);
+    } else {
+      yield [dir, file];
+    }
   }
 }
 
