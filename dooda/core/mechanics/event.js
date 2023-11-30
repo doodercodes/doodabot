@@ -5,7 +5,7 @@ class DoodabotEvent {
     this.event = event;
   }
 
-  main(event) {
+  execute(event) {
     this.bot.on(this.event, event.execute.bind(event));
   }
 }

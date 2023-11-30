@@ -29,15 +29,22 @@ class ModuleManager {
   }
 
   async loadEvents(file, fullPath, moduleName) {
-    const Event = require(fullPath);
-    const CreateEvent = new DoodabotEvent(this.bot, moduleName);
-    const event = new Event(CreateEvent);
-    if (typeof event.execute !== 'function') {
-      this.bot.log.warn(
-        `The \`${moduleName}\` event does not have a valid execute method.`
-      );
-      // CreateEvent.main(event);
-      // this.bot.log.info(`Loaded the ${moduleName} event.`);
+    try {
+      const Event = require(fullPath);
+      const CreateEvent = new DoodabotEvent(this.bot, moduleName);
+      const event = new Event(CreateEvent);
+      if (typeof event.execute !== 'function') {
+        this.bot.log.warn(
+          `The \`${moduleName}\` event does not have a valid execute method.`
+        );
+        return;
+      }
+      if (event.evt.enabled) {
+        CreateEvent.execute(event);
+        this.bot.log.info(`Loaded the ${moduleName} event.`);
+      }
+    } catch (err) {
+      this.bot.log.error(`Failed to load event in \`${file}\`: ${err}`);
     }
   }
 
