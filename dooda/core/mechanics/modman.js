@@ -1,6 +1,5 @@
 const DoodabotCommand = require('./command');
 const DoodabotEvent = require('./event');
-const Logger = require('./logger');
 const fs = require('fs');
 const path = require('path');
 
@@ -39,7 +38,8 @@ class ModuleManager {
         );
         return;
       }
-      if (event.evt.enabled) {
+      const { enabled } = event.evt;
+      if (enabled) {
         CreateEvent.execute(event);
         this.bot.log.info(`Loaded the ${moduleName} event.`);
       }
