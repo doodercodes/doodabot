@@ -19,13 +19,6 @@ class Doodabot extends Client {
   }
 
   /**
-   * Starts events when the full client connection process is finished.
-   */
-  ready() {
-    // this.log.log('---------------------------');
-    this.log.info(`Successfully logged in as ${this.user.username}.`);
-  }
-  /**
    * Check if the bot is ready.
    * @return {bool} ready or not
    */
@@ -40,15 +33,10 @@ class Doodabot extends Client {
       await this.login(this.config.dsc.token);
     } catch (err) {
       this.log.error(err.message);
-      return;
+
+      // this.build(); TODO: mechanism to restart the bot on login fail
     }
 
-    this.once('ready', () => {
-      this.ready();
-    });
-
-    /*     this.loadEvents();
-    this.loadCommands(); */
     /*     this.on('interactionCreate', async (interaction) => {
       // if (!interaction.isChatInputCommand()) return;
       if (!interaction.isCommand()) return;
