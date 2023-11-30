@@ -5,25 +5,15 @@
 # !.vscode/extensions.json
 # !.vscode/*.code-snippets
 
-doodabot.session.sql
-doodabot.session.md
-Bot-Hosting.session.sql
 tempCodeRunnerFile.javascript
 tempCodeRunnerFile.js
-welcome-card.web
-Directory Listing.txt
-Test.js
-dooda/core/mechanics/executor.js
-dooda/core/mechanics/event.js
-dooda/modules/events
+.sh
+
 # Local History for Visual Studio Code
 .history/
 
 # Built Visual Studio Code Extensions
 *.vsix
-
-bw.json
-.sh
 
 # Logs
 logs
