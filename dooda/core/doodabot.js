@@ -10,11 +10,11 @@ class Doodabot extends Client {
     super({
       intents: config.dsc.intents,
     });
-    new ModuleManager(this);
     this.commands = new Collection();
     this.log = new Logger();
     this.config = config;
     this.prefs = this.config.prefs;
+    new ModuleManager(this);
   }
 
   async build() {
