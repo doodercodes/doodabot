@@ -12,13 +12,13 @@ class ModuleManager {
   }
 
   async loadAllModules() {
-    const modulesDir = '../../modules/';
-    const eventsDir = modulesDir + 'events';
+    const modulesDir = '../../modules/',
+      eventsDir = modulesDir + 'events';
     let fullPath, moduleName;
     for (const [root, file] of walkSync(path.join(__dirname, modulesDir))) {
       fullPath = path.join(root, file);
-      if (path.extname(fullPath) !== '.js') continue;
       moduleName = file.split('.')[0];
+      if (path.extname(file) !== '.js') continue;
       if (root === path.join(__dirname, eventsDir)) {
         await this.loadEvents(file, fullPath, moduleName);
       } else {
@@ -29,17 +29,16 @@ class ModuleManager {
 
   async loadEvents(file, fullPath, moduleName) {
     try {
-      const Event = require(fullPath);
-      const CreateEvent = new DoodabotEvent(this.bot, moduleName);
-      const event = new Event(CreateEvent);
+      const Event = require(fullPath),
+        CreateEvent = new DoodabotEvent(this.bot, moduleName),
+        event = new Event(CreateEvent);
       if (typeof event.execute !== 'function') {
         this.bot.log.warn(
           `The \`${moduleName}\` event does not have a valid execute method.`
         );
         return;
       }
-      const { enabled } = event.evt;
-      if (enabled) {
+      if (event.evt.enabled) {
         CreateEvent.execute(event);
         this.bot.log.info(`Loaded the ${moduleName} event.`);
       }
@@ -50,9 +49,9 @@ class ModuleManager {
 
   async loadCommands(file, fullPath, moduleName) {
     try {
-      const Command = require(fullPath);
-      const CreateCommand = new DoodabotCommand(this.bot);
-      const cmd = new Command(CreateCommand);
+      const Command = require(fullPath),
+        CreateCommand = new DoodabotCommand(this.bot),
+        cmd = new Command(CreateCommand);
       await this.setCommand(cmd, file);
       this.bot.log.info(`Loaded the ${moduleName} command.`);
     } catch (err) {
@@ -62,9 +61,9 @@ class ModuleManager {
 
   async setCommand(command, file) {
     try {
-      const { cmd } = command;
-      const cmdName = cmd.name;
-      const cmdNameLower = cmdName.toLowerCase();
+      const { cmd } = command,
+        cmdName = cmd.name,
+        cmdNameLower = cmdName.toLowerCase();
       if (cmdName && cmd.run) {
         this.bot.commands.set(cmdNameLower, command);
         this.commands[cmdNameLower] = cmd;
@@ -78,8 +77,8 @@ class ModuleManager {
 function* walkSync(dir) {
   const files = fs.readdirSync(dir);
   for (const file of files) {
-    const pathToFile = path.join(dir, file);
-    const isDirectory = fs.statSync(pathToFile).isDirectory();
+    const pathToFile = path.join(dir, file),
+      isDirectory = fs.statSync(pathToFile).isDirectory();
     if (isDirectory) {
       yield* walkSync(pathToFile);
     } else {
