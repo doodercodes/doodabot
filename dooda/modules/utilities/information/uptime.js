@@ -15,8 +15,8 @@ class UptimeCommand {
     const minutes = Math.floor(bot.uptime / 60000) % 60;
     const seconds = Math.floor(bot.uptime / 1000) % 60;
 
-    const uptimeMessage = `Uptime: ${days}d ${hrs}h ${minutes}m ${seconds}s`;
-    msg.channel.send(uptimeMessage);
+    const uptimeMsg = `Uptime: ${days}d ${hrs}h ${minutes}m ${seconds}s`;
+    msg.channel.send(uptimeMsg);
   }
 }
 

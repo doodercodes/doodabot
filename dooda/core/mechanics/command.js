@@ -14,6 +14,7 @@ class DoodabotCommand {
     this.nsfw = false;
     this.enabled = true;
   }
+
   async run() {}
 }
 
