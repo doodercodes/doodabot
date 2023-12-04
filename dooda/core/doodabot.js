@@ -22,15 +22,7 @@ class Doodabot extends Client {
       await this.login(this.config.dsc.token);
     } catch (err) {
       this.log.error(err.message);
-
-      // this.build(); TODO: mechanism to restart the bot on login fail
     }
-
-    /*     this.on('interactionCreate', async (interaction) => {
-      // if (!interaction.isChatInputCommand()) return;
-      if (!interaction.isCommand()) return;
-      // const { commandName, options, user, guildId } = interaction;
-    }); */
   }
 }
 
