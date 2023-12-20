@@ -21,7 +21,7 @@ async function main(msg, bot) {
 }
 
 function getCommandPrefix(bot, msg) {
-  const pfx = bot.config.prefs.pfx,
+  const pfx = bot.cfg.prefs.pfx,
     pfxMention = new RegExp(`^<@!?${bot.user.id}> `);
   return msg.content.startsWith(pfx)
     ? pfx
