@@ -40,6 +40,21 @@ class Doodabot extends Client {
     try {
       this.log.info('Logging into Client...');
       await this.login(this.cfg.dsc.token);
+
+      // register slash command
+      this.application.commands
+        .create({
+          name: 'ping',
+          description: 'Ping Slash Command',
+        })
+        .then((slash) => {
+          console.log('Ping Slash Command built! ' + slash);
+        });
+      this.on('interactionCreate', async (interaction) => {
+        if (!interaction.isChatInputCommand()) return;
+        const { commandName } = interaction;
+        if (commandName === 'ping') interaction.reply('pong');
+      });
     } catch (err) {
       this.log.error(err.message);
     }
