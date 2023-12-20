@@ -1,5 +1,6 @@
 const { Client, Collection, EmbedBuilder, Events } = require('discord.js');
 const ModuleManager = require('./mechanics/modman');
+const Database = require('./mechanics/database');
 const Config = require('./mechanics/config');
 const Logger = require('./mechanics/logger');
 
