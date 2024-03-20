@@ -12,64 +12,58 @@ class ModuleManager {
   }
 
   async loadAllModules() {
-    const modulesDir = '../../modules/',
-      eventsDir = modulesDir + 'events';
-    let fullPath, moduleName;
+    const modulesDir = '../../modules/';
+    const eventsDir = modulesDir + 'events';
+
     for (const [root, file] of walkSync(path.join(__dirname, modulesDir))) {
-      fullPath = path.join(root, file);
-      moduleName = file.split('.')[0];
+      const fullPath = path.join(root, file);
+      const moduleName = file.split('.')[0];
       if (path.extname(file) !== '.js') continue;
-      if (root === path.join(__dirname, eventsDir)) {
+      if (root === path.join(__dirname, eventsDir))
         await this.loadEvents(file, fullPath, moduleName);
-      } else {
-        await this.loadCommands(file, fullPath, moduleName);
-      }
+      else await this.loadCommands(file, fullPath);
     }
   }
 
   async loadEvents(file, fullPath, moduleName) {
     try {
-      const Event = require(fullPath),
-        CreateEvent = new DoodabotEvent(this.bot, moduleName),
-        event = new Event(CreateEvent);
+      const Event = require(fullPath);
+      const CreateEvent = new DoodabotEvent(this.bot, moduleName);
+      const event = new Event(CreateEvent);
+
       if (typeof event.execute !== 'function') {
         this.bot.log.warn(
-          `The \`${moduleName}\` event does not have a valid execute method.`
+          `The '${moduleName}' event does not have a valid execute method.`
         );
         return;
       }
       if (event.evt.enabled) {
         CreateEvent.execute(event);
-        this.bot.log.info(`Loaded the ${moduleName} event.`);
+        this.bot.log.info(`Loaded the '${moduleName}' event.`);
       }
     } catch (err) {
-      this.bot.log.error(`Failed to load event in \`${file}\`: ${err}`);
+      this.bot.log.error(`Failed to load event in '${file}': ${err}`);
     }
   }
 
-  async loadCommands(file, fullPath, moduleName) {
+  async loadCommands(file, fullPath) {
     try {
-      const Command = require(fullPath),
-        CreateCommand = new DoodabotCommand(this.bot),
-        cmd = new Command(CreateCommand);
-      await this.setCommand(cmd, file);
-      this.bot.log.info(`Loaded the ${moduleName} command.`);
-    } catch (err) {
-      this.bot.log.error(`Failed to load command in \`${file}\`: ${err}`);
-    }
-  }
+      const Command = require(fullPath);
+      const CreateCommand = new DoodabotCommand(this.bot);
+      const command = new Command(CreateCommand);
+      let { name, type, desc } = command.cmd;
+      name = name.toLowerCase();
+      type = type.toLowerCase();
 
-  async setCommand(command, file) {
-    try {
-      const { cmd } = command,
-        cmdName = cmd.name,
-        cmdNameLower = cmdName.toLowerCase();
-      if (cmdName && cmd.run) {
-        this.bot.commands.set(cmdNameLower, command);
-        this.commands[cmdNameLower] = cmd;
+      if (name !== '') {
+        if (typeof command.run === 'function') {
+          this.bot.cmds.set(name, command);
+          this.commands[name] = command;
+          this.bot.log.info(`Loaded the '${name}' text command.`);
+        }
       }
     } catch (err) {
-      this.bot.log.error(`Cannot set command in \`${file}\`: ${err}`);
+      this.bot.log.error(`Failed to load command in '${file}': ${err}`);
     }
   }
 }
