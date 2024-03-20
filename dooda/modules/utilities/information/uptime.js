@@ -5,7 +5,7 @@ class UptimeCommand {
     cmd.category = 'utility';
     cmd.aliases = ['up'];
     cmd.usage = '!uptime';
-    cmd.desc = "Check the bot's uptime.";
+    cmd.desc = 'Check the bot\'s uptime.';
   }
 
   async run(msg) {

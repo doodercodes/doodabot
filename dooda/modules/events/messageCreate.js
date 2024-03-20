@@ -31,13 +31,11 @@ function getCommandPrefix(bot, msg) {
 }
 
 function findCommand(bot, msg, pfx) {
-  const args = msg.content.slice(pfx.length).trim().split(/ +/g),
-    cmdName = args.shift().toLowerCase(),
-    cmd =
-      bot.commands.get(cmdName) ||
-      bot.commands.find(
-        (x) => x.cmd.aliases && x.cmd.aliases.includes(cmdName)
-      );
+  const args = msg.content.slice(pfx.length).trim().split(/ +/g);
+  const cmdName = args.shift().toLowerCase();
+  const cmd =
+    bot.cmds.get(cmdName) ||
+    bot.cmds.find((x) => x.cmd.aliases && x.cmd.aliases.includes(cmdName));
   return { cmd, args };
 }
 
