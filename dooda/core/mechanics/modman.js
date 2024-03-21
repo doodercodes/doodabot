@@ -51,9 +51,8 @@ class ModuleManager {
       const Command = require(fullPath);
       const CreateCommand = new DoodabotCommand(this.bot);
       const command = new Command(CreateCommand);
-      let { name, type, desc } = command.cmd;
+      let { name } = command.cmd;
       name = name.toLowerCase();
-      type = type.toLowerCase();
 
       if (name !== '') {
         if (typeof command.run === 'function') {

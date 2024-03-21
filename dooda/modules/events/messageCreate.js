@@ -11,7 +11,6 @@ class MessageCreateEvent {
 
 async function main(msg, bot) {
   const pfx = getCommandPrefix(bot, msg);
-  if (msg.author.bot || msg.channel.type === 'dm') return;
   if (!pfx) return;
   const { cmd, args } = findCommand(bot, msg, pfx);
   if (cmd) {

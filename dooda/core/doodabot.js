@@ -10,6 +10,7 @@ class Doodabot extends Client {
   constructor() {
     super({
       intents: cfg.dsc.intents,
+      partials: cfg.dsc.partials,
     });
     this.cfg = cfg;
     this.modules;

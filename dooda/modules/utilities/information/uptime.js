@@ -9,6 +9,7 @@ class UptimeCommand {
   }
 
   async run(msg) {
+    if (msg.author.bot) return;
     const bot = this.cmd.bot;
     const days = Math.floor(bot.uptime / 86400000);
     const hrs = Math.floor(bot.uptime / 3600000) % 24;
